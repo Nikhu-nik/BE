@@ -302,7 +302,7 @@ exports.userview = (req, res) => {
 
 exports.productList = (req, res) => {
 	Product.findAll({
-		attributes: ['name', 'price', 'discount', 'desc', 'category', 'image','userId','sub'],
+		attributes: ['id','name', 'price', 'discount', 'desc', 'category', 'image','userId','sub'],
 	}).then(product => {
 		res.status(200).json({
 			//"description": "Admin Board",
@@ -436,6 +436,25 @@ exports.wallet = (req, res) => {
 	})
 }
 
+
+
+exports.productdetails = (req, res) => {
+	var id = req.params.id;
+	Product.findOne({
+		where: { id: id },
+		attributes: [ 'name','price', 'discount', 'desc', 'category', 'image',]
+	
+	}).then(product => {
+		res.status(200).json({
+				"user": product
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Management Board",
+			"error": err
+		});
+	})
+}
 
 
 

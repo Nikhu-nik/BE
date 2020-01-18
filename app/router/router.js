@@ -36,6 +36,8 @@ module.exports = function(app) {
 	
 	app.put('/api/updatwallet/:id/', controller.Updatewallet);
 	app.get('/api/get/:id/', controller.wallet);
+	app.get('/api/productdetails/:id/', controller.productdetails);
+	
 	
 
 	app.post('/api/product/admin',[authJwt.verifyToken], controller.product);
