@@ -33,18 +33,21 @@ module.exports = function(app) {
 	app.get('/api/userview',[authJwt.verifyToken], controller.userview);
 	
 	app.get('/api/updateuser/:id/:status', controller.updateUserStatus);
-	
+	app.get('/api/updateProduct/:id/:status', controller.updateProductStatus);
+
 	app.put('/api/updatwallet/:id/', controller.Updatewallet);
 	app.get('/api/get/:id/', controller.wallet);
 	app.get('/api/productdetails/:id/', controller.productdetails);
+	app.get('/api/cartCount', [authJwt.verifyToken],controller.cartCount);
 	
-	
+
 
 	app.post('/api/product/admin',[authJwt.verifyToken], controller.product);
 	app.post('/api/property/admin',[authJwt.verifyToken], controller.property);
 
 	//addproductdetails
 	app.post('/api/addproductdetails', controller.addproductdetails);
+	app.post('/api/addtocart', controller.addtoCart);
 	
 	
 	app.post('/api/file/upload', upload.array("file"), controller.reseller);

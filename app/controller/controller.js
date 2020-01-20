@@ -9,6 +9,7 @@ const User = db.user;
 const Role = db.role;
 const Product = db.product;
 const Property = db.property;
+const AddtoCart = db.addtocart;
 
 const Op = db.Sequelize.Op;
 var multer = require("multer");
@@ -121,14 +122,14 @@ exports.product = (req, res) => {
 		desc: req.body.desc,
 		discount: req.body.discount,
 		price: req.body.price,
-		sub:req.body.sub,
+		sub: req.body.sub,
 		image: req.body.image,
 		image1: req.body.image1,
 		image2: req.body.image2,
 		image3: req.body.image3,
 		image4: req.body.image4,
 		category: req.body.category,
-		userId:req.body.userId
+		userId: req.body.userId
 
 	}).then(product => {
 		res.status(200).json({
@@ -156,7 +157,7 @@ exports.property = (req, res) => {
 		propertyimage2: req.body.propertyimage2,
 		propertyimage3: req.body.propertyimage3,
 		propertyimage4: req.body.propertyimage4,
-		userId:req.body.userId
+		userId: req.body.userId
 
 	}).then(property => {
 		res.status(200).json({
@@ -170,6 +171,9 @@ exports.property = (req, res) => {
 		});
 	})
 }
+
+
+
 
 
 exports.signin = (req, res) => {
@@ -278,7 +282,7 @@ exports.userList = (req, res) => {
 exports.userview = (req, res) => {
 	User.findOne({
 		where: { id: req.userId },
-		attributes: ['owner_name', 'business_name', 'Email_address', 'phone_no', 'owneraddress','Wallet', 'Balance'],
+		attributes: ['owner_name', 'business_name', 'Email_address', 'phone_no', 'owneraddress', 'Wallet', 'Balance'],
 		include: [{
 			model: Role,
 			attributes: ['id', 'name'],
@@ -302,7 +306,7 @@ exports.userview = (req, res) => {
 
 exports.productList = (req, res) => {
 	Product.findAll({
-		attributes: ['id','name', 'price', 'discount', 'desc', 'category', 'image','userId','sub'],
+		attributes: ['id', 'name', 'price', 'discount', 'desc', 'category', 'image', 'userId', 'sub'],
 	}).then(product => {
 		res.status(200).json({
 			//"description": "Admin Board",
@@ -319,7 +323,7 @@ exports.productList = (req, res) => {
 
 exports.propertyList = (req, res) => {
 	Property.findAll({
-		attributes: ['propertyname', 'propertyprice', 'propertyimage','userId'],
+		attributes: ['propertyname', 'propertyprice', 'propertyimage', 'userId'],
 	}).then(property => {
 		res.status(200).json({
 			//"description": "Admin Board",
@@ -416,6 +420,45 @@ exports.updateUserStatus = (req, res) => {
 }
 
 
+exports.updateProductStatus = (req, res) => {
+
+	//console.log(req);
+	var id = req.params.id;
+	var status = req.params.status;
+	if (status == 1) {
+		Product.update(
+			{ status: '0' },
+			{ where: { id: id } }
+		).then(product => {
+			res.status(200).json({
+				"description": "Management Board",
+				"user": product
+			});
+		}).catch(err => {
+			res.status(500).json({
+				"description": "Can not access Management Board",
+				"error": err
+			});
+		})
+	} else {
+		Product.update(
+			{ status: '1' },
+			{ where: { id: id } }
+		).then(user => {
+			res.status(200).json({
+				"description": "Management Board",
+				"user": user
+			});
+		}).catch(err => {
+			res.status(500).json({
+				"description": "Can not access Management Board",
+				"error": err
+			});
+		})
+	}
+}
+
+
 
 
 exports.wallet = (req, res) => {
@@ -423,10 +466,10 @@ exports.wallet = (req, res) => {
 	User.findOne({
 		where: { id: id },
 		attributes: ['Wallet', 'owner_name']
-	
+
 	}).then(user => {
 		res.status(200).json({
-				"user": user
+			"user": user
 		});
 	}).catch(err => {
 		res.status(500).json({
@@ -442,11 +485,11 @@ exports.productdetails = (req, res) => {
 	var id = req.params.id;
 	Product.findOne({
 		where: { id: id },
-		attributes: [ 'name','price', 'discount', 'desc', 'category', 'image',]
-	
+		attributes: ['id', 'name', 'price', 'discount', 'desc', 'category', 'image',]
+
 	}).then(product => {
 		res.status(200).json({
-				"user": product
+			"user": product
 		});
 	}).catch(err => {
 		res.status(500).json({
@@ -462,21 +505,66 @@ exports.Updatewallet = (req, res) => {
 	var id = req.params.id;
 
 	User.update(
-		{ Wallet:req.body.Wallet },
-			{ where: { id: id } }
-		).then(user => {
-			res.status(200).json({
-				"description": user
-			
-			});
-		}).catch(err => {
-			res.status(500).json({
-				"description": "Can not access Management Board",
-				"error": err
-			});
+		{ Wallet: req.body.Wallet },
+		{ where: { id: id } }
+	).then(user => {
+		res.status(200).json({
+			"description": user
+
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Management Board",
+			"error": err
+		});
 	})
 }
 
+
+
+
+
+exports.addtoCart = (req, res) => {
+	// Save User to Database
+	console.log("Processing func -> Adding Products");
+	AddtoCart.create({
+	name:req.body.name,
+	price:req.body.price,
+	image:req.body.image,
+	quantity:req.body.quantity,
+	userId:req.body.userId,
+	productId:req.body.productId,
+
+	}).then(addtocart => {
+		res.status(200).json({
+			"description": "addtocart Added",
+			"addtocart": addtocart
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access addtocart Page",
+			"error": err
+		});
+	})
+}
+
+
+exports.cartCount = (req, res) => {
+	
+	AddtoCart.count(
+		{ where: { userId: req.userId } 
+	}).then(addtocart => {
+		res.status(200).json({
+			//"description": "Admin Board",
+			"cartCount": addtocart
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Admin Board",
+			"error": err
+		});
+	})
+}
 
 
 exports.managementBoard = (req, res) => {

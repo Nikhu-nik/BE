@@ -6,7 +6,7 @@ module.exports = (sequelize, Sequelize) => {
 	  Email_address: {type:Sequelize.STRING},
 	  Gst_no: {type:Sequelize.STRING},
 	
-	  phone_no: {type:Sequelize.INTEGER(10)},
+	  phone_no: {type:Sequelize.INTEGER(15)},
 	    Registration_certificate: {type:Sequelize.STRING},  
 		GST_Certificate: {type:Sequelize.STRING},  
 		Pan_card: {type:Sequelize.STRING},
@@ -15,7 +15,7 @@ module.exports = (sequelize, Sequelize) => {
 		  Product_category: {type:Sequelize.STRING},
 				complete_address: {type:Sequelize.STRING},
 				status:{type:Sequelize.STRING},
-				   Wallet: {type:Sequelize.INTEGER(10)},
+				   Wallet: {type:Sequelize.INTEGER(15)},
 		    Balance: {type:Sequelize.INTEGER(10)},
 	});
 	
