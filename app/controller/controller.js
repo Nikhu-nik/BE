@@ -129,7 +129,8 @@ exports.product = (req, res) => {
 		image3: req.body.image3,
 		image4: req.body.image4,
 		category: req.body.category,
-		userId: req.body.userId
+		userId: req.body.userId,
+		status:req.body.status
 
 	}).then(product => {
 		res.status(200).json({
@@ -306,7 +307,46 @@ exports.userview = (req, res) => {
 
 exports.productList = (req, res) => {
 	Product.findAll({
-		attributes: ['id', 'name', 'price', 'discount', 'desc', 'category', 'image', 'userId', 'sub'],
+	
+		attributes: ['id', 'name', 'price', 'discount', 'desc', 'category', 'image', 'userId', 'sub','status'],
+	}).then(product => {
+		res.status(200).json({
+			//"description": "Admin Board",
+			product
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Admin Board",
+			"error": err
+		});
+	})
+}
+
+
+
+exports.editprod = (req, res) => {
+	var id= req.params.id;
+	Product.findOne({
+	where:{id:id},
+		attributes: ['id', 'name', 'price', 'discount', 'desc', 'category', 'image','image1','image2','image3','image4', 'userId', 'sub','status'],
+	}).then(product => {
+		res.status(200).json({
+			//"description": "Admin Board",
+			product
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Admin Board",
+			"error": err
+		});
+	})
+}
+
+
+exports.dashproductList = (req, res) => {
+	Product.findAll({
+	where:{status:1},
+		attributes: ['id', 'name', 'price', 'discount', 'desc', 'category', 'image', 'userId', 'sub','status'],
 	}).then(product => {
 		res.status(200).json({
 			//"description": "Admin Board",
@@ -323,6 +363,7 @@ exports.productList = (req, res) => {
 
 exports.propertyList = (req, res) => {
 	Property.findAll({
+		
 		attributes: ['propertyname', 'propertyprice', 'propertyimage', 'userId'],
 	}).then(property => {
 		res.status(200).json({
@@ -422,7 +463,7 @@ exports.updateUserStatus = (req, res) => {
 
 exports.updateProductStatus = (req, res) => {
 
-	//console.log(req);
+	console.log(req);
 	var id = req.params.id;
 	var status = req.params.status;
 	if (status == 1) {
@@ -444,10 +485,10 @@ exports.updateProductStatus = (req, res) => {
 		Product.update(
 			{ status: '1' },
 			{ where: { id: id } }
-		).then(user => {
+		).then(product => {
 			res.status(200).json({
 				"description": "Management Board",
-				"user": user
+				"user": product
 			});
 		}).catch(err => {
 			res.status(500).json({
@@ -457,8 +498,6 @@ exports.updateProductStatus = (req, res) => {
 		})
 	}
 }
-
-
 
 
 exports.wallet = (req, res) => {
@@ -499,7 +538,37 @@ exports.productdetails = (req, res) => {
 	})
 }
 
+exports.UpdateProduct = (req, res) => {
+	var id = req.params.id;
 
+	Product.update(
+		{name: req.body.name,
+		desc: req.body.desc,
+		discount: req.body.discount,
+		price: req.body.price,
+		sub: req.body.sub,
+		image: req.body.image,
+		image1: req.body.image1,
+		image2: req.body.image2,
+		image3: req.body.image3,
+		image4: req.body.image4,
+		category: req.body.category,
+		status:req.body.status,
+		userId: req.body.userId},
+
+		{ where: { id: id } }
+	).then(product => {
+		res.status(200).json({
+			"description": product
+
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Management Board",
+			"error": err
+		});
+	})
+}
 
 exports.Updatewallet = (req, res) => {
 	var id = req.params.id;
