@@ -26,6 +26,7 @@ db.product = require('../model/product.model.js')(sequelize, Sequelize);
  db.reseller = require('../model/reseller.model.js')(sequelize, Sequelize);
  db.property = require('../model/property.model.js')(sequelize, Sequelize);
  db.addtocart = require('../model/addtocart.model.js')(sequelize, Sequelize);
+ db.order = require('../model/order.model.js')(sequelize, Sequelize);
  
 db.role.belongsToMany(db.user, { through: 'user_roles', foreignKey: 'roleId', otherKey: 'userId'});
 db.user.belongsToMany(db.role, { through: 'user_roles', foreignKey: 'userId', otherKey: 'roleId'});

@@ -41,17 +41,23 @@ module.exports = function(app) {
 	app.get('/api/get/:id/', [authJwt.verifyToken], controller.wallet);
 	app.get('/api/productdetails/:id/',[authJwt.verifyToken],  controller.productdetails);
 	app.get('/api/cartCount', [authJwt.verifyToken],controller.cartCount);
-	app.put('/api/updatesProduct/:id/', [authJwt.verifyToken], controller.UpdateProduct)
+	app.put('/api/updatesProduct/:id/', [authJwt.verifyToken], controller.UpdateProduct);
+	app.get('/api/service/:service/',[authJwt.verifyToken],  controller.service);
 
-
+	app.put('/api/updatepass/', [authJwt.verifyToken], controller.updatePass);
+app.get('/api/getprname',controller.productname);
+	
 	app.post('/api/product/admin',[authJwt.verifyToken], controller.product);
 	app.post('/api/property/admin',[authJwt.verifyToken], controller.property);
 
 	//addproductdetails
 	app.post('/api/addproductdetails',[authJwt.verifyToken],  controller.addproductdetails);
 	app.post('/api/addtocart', [authJwt.verifyToken], controller.addtoCart);
+	app.post('/api/order', [authJwt.verifyToken], controller.order);
+app.get('/api/getorder', [authJwt.verifyToken], controller.orderList);
+app.get('/api/getcart', [authJwt.verifyToken], controller.cartlist);
 	
-	
+
 	app.post('/api/file/upload', upload.array("file"),  controller.reseller);
 		app.post('/api/file/product', products.array("file"),  controller.products);
 		app.post('/api/file/property', property.array("file"),  controller.properties);

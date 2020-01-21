@@ -10,6 +10,7 @@ const Role = db.role;
 const Product = db.product;
 const Property = db.property;
 const AddtoCart = db.addtocart;
+const Order = db.order;
 
 const Op = db.Sequelize.Op;
 var multer = require("multer");
@@ -324,25 +325,6 @@ exports.productList = (req, res) => {
 
 
 
-exports.editprod = (req, res) => {
-	var id= req.params.id;
-	Product.findOne({
-	where:{id:id},
-		attributes: ['id', 'name', 'price', 'discount', 'desc', 'category', 'image','image1','image2','image3','image4', 'userId', 'sub','status'],
-	}).then(product => {
-		res.status(200).json({
-			//"description": "Admin Board",
-			product
-		});
-	}).catch(err => {
-		res.status(500).json({
-			"description": "Can not access Admin Board",
-			"error": err
-		});
-	})
-}
-
-
 exports.dashproductList = (req, res) => {
 	Product.findAll({
 	where:{status:1},
@@ -538,6 +520,67 @@ exports.productdetails = (req, res) => {
 	})
 }
 
+exports.productname=  (req, res) => {
+	
+	Product.findAll({
+	
+		where: { status: 1},
+		attributes: ['category']
+
+	}).then(product => {
+		res.status(200).json({
+			"user": product
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Management Board",
+			"error": err
+		});
+	})
+}
+
+
+exports.service=  (req, res) => {
+	var service = req.params.service;
+	Product.findAll({
+	
+		where: { status: 1,category:service},
+		attributes: ['name','id']
+
+	}).then(product => {
+		res.status(200).json({
+			"user": product
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Management Board",
+			"error": err
+		});
+	})
+}
+
+exports.editprod = (req, res) => {
+	var id= req.params.id;
+	Product.findOne({
+	where:{id:id},
+		attributes: ['id', 'name', 'price', 'discount', 'desc', 'category', 'image','image1','image2','image3','image4', 'userId', 'sub','status'],
+	}).then(product => {
+		res.status(200).json({
+			//"description": "Admin Board",
+			product
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Admin Board",
+			"error": err
+		});
+	})
+}
+
+
+
+
+
 exports.UpdateProduct = (req, res) => {
 	var id = req.params.id;
 
@@ -569,6 +612,28 @@ exports.UpdateProduct = (req, res) => {
 		});
 	})
 }
+
+exports.updatePass = (req, res) => {
+	
+
+	User.update(
+		{
+		password: bcrypt.hashSync(req.body.password),
+		cpass: bcrypt.hashSync(req.body.cpass)},
+		{ where: {	phone_no: req.body.phone_no, } }
+	).then(user => {
+		res.status(200).json({
+			"description": user
+
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Management Board",
+			"error": err
+		});
+	})
+}
+
 
 exports.Updatewallet = (req, res) => {
 	var id = req.params.id;
@@ -602,6 +667,7 @@ exports.addtoCart = (req, res) => {
 	image:req.body.image,
 	quantity:req.body.quantity,
 	userId:req.body.userId,
+	total:req.body.total,
 	productId:req.body.productId,
 
 	}).then(addtocart => {
@@ -612,6 +678,66 @@ exports.addtoCart = (req, res) => {
 	}).catch(err => {
 		res.status(500).json({
 			"description": "Can not access addtocart Page",
+			"error": err
+		});
+	})
+}
+exports.order = (req, res) => {
+	// Save User to Database
+	
+	Order.create({
+	name:req.body.name,
+	price:req.body.price,
+	image:req.body.image,
+	quantity:req.body.quantity,
+	userId:req.body.userId,
+	total:req.body.total,
+	productId:req.body.productId,
+
+	}).then(order => {
+		res.status(200).json({
+			"description": "order Added",
+			"order": order
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access addtocart Page",
+			"error": err
+		});
+	})
+}
+
+
+exports.orderList = (req, res) => {
+	Order.findAll({
+		where: { userId: req.userId },
+		attributes: ['id', 'name', 'price',  'image', 'userId','quantity','total','userId','productId'],
+	}).then(order => {
+		res.status(200).json({
+			//"description": "Admin Board",
+			"order":order
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Admin Board",
+			"error": err
+		});
+	})
+}
+
+exports.cartlist = (req, res) => {
+	AddtoCart.findAll({
+		where: { userId: req.userId },
+		attributes: ['id', 'name', 'price',  'image', 'userId','quantity','total','userId','productId'],
+		
+	}).then(addtocart => {
+		res.status(200).json({
+			//"description": "Admin Board",
+			"cart":addtocart
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Admin Board",
 			"error": err
 		});
 	})
