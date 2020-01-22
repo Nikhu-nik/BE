@@ -11,6 +11,7 @@ const Product = db.product;
 const Property = db.property;
 const AddtoCart = db.addtocart;
 const Order = db.order;
+const Category = db.category;
 
 const Op = db.Sequelize.Op;
 var multer = require("multer");
@@ -324,6 +325,23 @@ exports.productList = (req, res) => {
 }
 
 
+exports.Category = (req, res) => {
+	Category.findAll({
+	
+		attributes: ['id', 'name'],
+	}).then(category => {
+		res.status(200).json({
+			//"description": "Admin Board",
+			category
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Admin Board",
+			"error": err
+		});
+	})
+}
+
 
 exports.dashproductList = (req, res) => {
 	Product.findAll({
@@ -545,7 +563,7 @@ exports.service=  (req, res) => {
 	Product.findAll({
 	
 		where: { status: 1,category:service},
-		attributes: ['name','id']
+		attributes: ['id', 'name', 'price', 'discount', 'desc', 'category', 'image','image1','image2','image3','image4', 'userId', 'sub','status']
 
 	}).then(product => {
 		res.status(200).json({
@@ -732,7 +750,7 @@ exports.cartlist = (req, res) => {
 		
 	}).then(addtocart => {
 		res.status(200).json({
-			//"description": "Admin Board",
+		
 			"cart":addtocart
 		});
 	}).catch(err => {

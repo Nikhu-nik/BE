@@ -30,6 +30,8 @@ module.exports = function(app) {
 	app.get('/api/productList', [authJwt.verifyToken], controller.productList);
 	app.get('/api/propertyList', [authJwt.verifyToken], controller.propertyList);
 	app.get('/api/dashproductList', [authJwt.verifyToken], controller.dashproductList);
+	app.get('/api/category', [authJwt.verifyToken], controller.Category);
+
 	
 	app.get('/api/userview',[authJwt.verifyToken], controller.userview);
 	
@@ -44,7 +46,7 @@ module.exports = function(app) {
 	app.put('/api/updatesProduct/:id/', [authJwt.verifyToken], controller.UpdateProduct);
 	app.get('/api/service/:service/',[authJwt.verifyToken],  controller.service);
 
-	app.put('/api/updatepass/', [authJwt.verifyToken], controller.updatePass);
+	app.put('/api/updatepass/',  controller.updatePass);
 app.get('/api/getprname',controller.productname);
 	
 	app.post('/api/product/admin',[authJwt.verifyToken], controller.product);
