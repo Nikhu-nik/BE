@@ -43,11 +43,13 @@ module.exports = function(app) {
 	app.get('/api/get/:id/', [authJwt.verifyToken], controller.wallet);
 	app.get('/api/productdetails/:id/',[authJwt.verifyToken],  controller.productdetails);
 	app.get('/api/cartCount', [authJwt.verifyToken],controller.cartCount);
+	app.get('/api/total', [authJwt.verifyToken],controller.cartCounts);
 	app.put('/api/updatesProduct/:id/', [authJwt.verifyToken], controller.UpdateProduct);
 	app.get('/api/service/:service/',[authJwt.verifyToken],  controller.service);
 
 	app.put('/api/updatepass/',  controller.updatePass);
-app.get('/api/getprname',controller.productname);
+app.get('/api/getprname',[authJwt.verifyToken],controller.productname);
+app.get('/api/revenue',[authJwt.verifyToken],controller.revenue);
 	
 	app.post('/api/product/admin',[authJwt.verifyToken], controller.product);
 	app.post('/api/property/admin',[authJwt.verifyToken], controller.property);
@@ -56,7 +58,12 @@ app.get('/api/getprname',controller.productname);
 	app.post('/api/addproductdetails',[authJwt.verifyToken],  controller.addproductdetails);
 	app.post('/api/addtocart', [authJwt.verifyToken], controller.addtoCart);
 	app.post('/api/order', [authJwt.verifyToken], controller.order);
+	app.post('/api/AddtoOrder', [authJwt.verifyToken], controller.AddtoOrder);
+
+	
 app.get('/api/getorder', [authJwt.verifyToken], controller.orderList);
+app.get('/api/orderCount', [authJwt.verifyToken], controller.orderCount);
+app.get('/api/AdminorderList', [authJwt.verifyToken], controller.AdminorderList);
 app.get('/api/getcart', [authJwt.verifyToken], controller.cartlist);
 	
 

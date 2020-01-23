@@ -422,6 +422,21 @@ exports.userCount = (req, res) => {
 }
 
 
+
+exports.orderCount = (req, res) => {
+	Order.count({
+	}).then(order => {
+		res.status(200).json({
+			order
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Admin Board",
+			"error": err
+		});
+	})
+}
+
 exports.updateUserStatus = (req, res) => {
 
 	console.log(req);
@@ -524,7 +539,7 @@ exports.productdetails = (req, res) => {
 	var id = req.params.id;
 	Product.findOne({
 		where: { id: id },
-		attributes: ['id', 'name', 'price', 'discount', 'desc', 'category', 'image',]
+		attributes: ['id', 'name', 'price', 'discount', 'desc', 'category', 'image','userId']
 
 	}).then(product => {
 		res.status(200).json({
@@ -576,6 +591,8 @@ exports.service=  (req, res) => {
 		});
 	})
 }
+
+
 
 exports.editprod = (req, res) => {
 	var id= req.params.id;
@@ -725,6 +742,29 @@ exports.order = (req, res) => {
 	})
 }
 
+exports.AddtoOrder = (req, res) => {
+	// Save User to Database
+	
+	Order.create({
+		name:req.body.name,
+	price:req.body.price,
+	image:req.body.image,
+	quantity:req.body.quantity,
+	userId:req.userId,
+	total:req.body.total,
+	productId:req.body.productId,
+	}).then(order => {
+		res.status(200).json({
+			"description": "order Added",
+			"order": order
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access addtocart Page",
+			"error": err
+		});
+	})
+}
 
 exports.orderList = (req, res) => {
 	Order.findAll({
@@ -742,11 +782,26 @@ exports.orderList = (req, res) => {
 		});
 	})
 }
+exports.AdminorderList = (req, res) => {
+	Order.findAll({
+		attributes: ['id', 'name', 'price',  'image', 'userId','quantity','total','userId','productId'],
+	}).then(order => {
+		res.status(200).json({
+			//"description": "Admin Board",
+			"order":order
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Admin Board",
+			"error": err
+		});
+	})
+}
 
 exports.cartlist = (req, res) => {
 	AddtoCart.findAll({
 		where: { userId: req.userId },
-		attributes: ['id', 'name', 'price',  'image', 'userId','quantity','total','userId','productId'],
+		attributes: ['name', 'price',  'image', 'userId','quantity','total','userId','productId'],
 		
 	}).then(addtocart => {
 		res.status(200).json({
@@ -763,13 +818,49 @@ exports.cartlist = (req, res) => {
 
 
 exports.cartCount = (req, res) => {
-	
-	AddtoCart.count(
-		{ where: { userId: req.userId } 
+	AddtoCart.sum('quantity',{
+		where: { userId: req.userId },
 	}).then(addtocart => {
 		res.status(200).json({
-			//"description": "Admin Board",
-			"cartCount": addtocart
+		
+			"cart":addtocart
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Admin Board",
+			"error": err
+		});
+	})
+}
+
+
+
+
+
+
+
+exports.cartCounts = (req, res) => {
+	AddtoCart.sum('total',{
+		where: { userId: req.userId },
+	}).then(addtocart => {
+		res.status(200).json({
+		
+			"cart":addtocart
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Admin Board",
+			"error": err
+		});
+	})
+}
+
+exports.revenue = (req, res) => {
+	Order.sum('total',{
+	}).then(addtocart => {
+		res.status(200).json({
+		
+			"cart":addtocart
 		});
 	}).catch(err => {
 		res.status(500).json({
