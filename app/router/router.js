@@ -58,7 +58,7 @@ app.get('/api/revenue',[authJwt.verifyToken],controller.revenue);
 	app.post('/api/addproductdetails',[authJwt.verifyToken],  controller.addproductdetails);
 	app.post('/api/addtocart', [authJwt.verifyToken], controller.addtoCart);
 	app.post('/api/order', [authJwt.verifyToken], controller.order);
-	app.post('/api/AddtoOrder', [authJwt.verifyToken], controller.AddtoOrder);
+	app.post('/api/AddtoOrder',[authJwt.verifyToken],  controller.AddtoOrder);
 
 	
 app.get('/api/getorder', [authJwt.verifyToken], controller.orderList);

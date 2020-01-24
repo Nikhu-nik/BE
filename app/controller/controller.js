@@ -132,7 +132,7 @@ exports.product = (req, res) => {
 		image4: req.body.image4,
 		category: req.body.category,
 		userId: req.body.userId,
-		status:req.body.status
+		status: req.body.status
 
 	}).then(product => {
 		res.status(200).json({
@@ -176,6 +176,36 @@ exports.property = (req, res) => {
 }
 
 
+exports.updatePass = (req, res) => {
+	User.findOne({
+		where: {
+			phone_no: req.body.phone_no,
+		}
+	}).then(user => {
+		if (!user) {
+			return res.status(404).send('User Not Found or not approved.');
+		}
+
+
+	User.update(
+		{
+			password: bcrypt.hashSync(req.body.password),
+			cpass: bcrypt.hashSync(req.body.cpass)
+		},
+		{ where: { phone_no: req.body.phone_no } }
+	).then(user => {
+		res.status(200).json({
+			"description": user
+
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Management Board",
+			"error": err
+		});
+	})
+})
+}
 
 
 
@@ -309,8 +339,8 @@ exports.userview = (req, res) => {
 
 exports.productList = (req, res) => {
 	Product.findAll({
-	
-		attributes: ['id', 'name', 'price', 'discount', 'desc', 'category', 'image', 'userId', 'sub','status'],
+
+		attributes: ['id', 'name', 'price', 'discount', 'desc', 'category', 'image', 'userId', 'sub', 'status'],
 	}).then(product => {
 		res.status(200).json({
 			//"description": "Admin Board",
@@ -327,7 +357,7 @@ exports.productList = (req, res) => {
 
 exports.Category = (req, res) => {
 	Category.findAll({
-	
+
 		attributes: ['id', 'name'],
 	}).then(category => {
 		res.status(200).json({
@@ -345,8 +375,8 @@ exports.Category = (req, res) => {
 
 exports.dashproductList = (req, res) => {
 	Product.findAll({
-	where:{status:1},
-		attributes: ['id', 'name', 'price', 'discount', 'desc', 'category', 'image', 'userId', 'sub','status'],
+		where: { status: 1 },
+		attributes: ['id', 'name', 'price', 'discount', 'desc', 'category', 'image', 'userId', 'sub', 'status'],
 	}).then(product => {
 		res.status(200).json({
 			//"description": "Admin Board",
@@ -363,7 +393,7 @@ exports.dashproductList = (req, res) => {
 
 exports.propertyList = (req, res) => {
 	Property.findAll({
-		
+
 		attributes: ['propertyname', 'propertyprice', 'propertyimage', 'userId'],
 	}).then(property => {
 		res.status(200).json({
@@ -440,7 +470,7 @@ exports.orderCount = (req, res) => {
 exports.updateUserStatus = (req, res) => {
 
 	console.log(req);
-	var id = req.params.id;
+
 	var status = req.params.status;
 	if (status == 1) {
 		User.update(
@@ -539,7 +569,7 @@ exports.productdetails = (req, res) => {
 	var id = req.params.id;
 	Product.findOne({
 		where: { id: id },
-		attributes: ['id', 'name', 'price', 'discount', 'desc', 'category', 'image','userId']
+		attributes: ['id', 'name', 'price', 'discount', 'desc', 'category', 'image', 'userId']
 
 	}).then(product => {
 		res.status(200).json({
@@ -553,11 +583,11 @@ exports.productdetails = (req, res) => {
 	})
 }
 
-exports.productname=  (req, res) => {
-	
+exports.productname = (req, res) => {
+
 	Product.findAll({
-	
-		where: { status: 1},
+
+		where: { status: 1 },
 		attributes: ['category']
 
 	}).then(product => {
@@ -573,12 +603,12 @@ exports.productname=  (req, res) => {
 }
 
 
-exports.service=  (req, res) => {
+exports.service = (req, res) => {
 	var service = req.params.service;
 	Product.findAll({
-	
-		where: { status: 1,category:service},
-		attributes: ['id', 'name', 'price', 'discount', 'desc', 'category', 'image','image1','image2','image3','image4', 'userId', 'sub','status']
+
+		where: { status: 1, category: service },
+		attributes: ['id', 'name', 'price', 'discount', 'desc', 'category', 'image', 'image1', 'image2', 'image3', 'image4', 'userId', 'sub', 'status']
 
 	}).then(product => {
 		res.status(200).json({
@@ -595,10 +625,10 @@ exports.service=  (req, res) => {
 
 
 exports.editprod = (req, res) => {
-	var id= req.params.id;
+	var id = req.params.id;
 	Product.findOne({
-	where:{id:id},
-		attributes: ['id', 'name', 'price', 'discount', 'desc', 'category', 'image','image1','image2','image3','image4', 'userId', 'sub','status'],
+		where: { id: id },
+		attributes: ['id', 'name', 'price', 'discount', 'desc', 'category', 'image', 'image1', 'image2', 'image3', 'image4', 'userId', 'sub', 'status'],
 	}).then(product => {
 		res.status(200).json({
 			//"description": "Admin Board",
@@ -620,19 +650,21 @@ exports.UpdateProduct = (req, res) => {
 	var id = req.params.id;
 
 	Product.update(
-		{name: req.body.name,
-		desc: req.body.desc,
-		discount: req.body.discount,
-		price: req.body.price,
-		sub: req.body.sub,
-		image: req.body.image,
-		image1: req.body.image1,
-		image2: req.body.image2,
-		image3: req.body.image3,
-		image4: req.body.image4,
-		category: req.body.category,
-		status:req.body.status,
-		userId: req.body.userId},
+		{
+			name: req.body.name,
+			desc: req.body.desc,
+			discount: req.body.discount,
+			price: req.body.price,
+			sub: req.body.sub,
+			image: req.body.image,
+			image1: req.body.image1,
+			image2: req.body.image2,
+			image3: req.body.image3,
+			image4: req.body.image4,
+			category: req.body.category,
+			status: req.body.status,
+			userId: req.body.userId
+		},
 
 		{ where: { id: id } }
 	).then(product => {
@@ -648,26 +680,6 @@ exports.UpdateProduct = (req, res) => {
 	})
 }
 
-exports.updatePass = (req, res) => {
-	
-
-	User.update(
-		{
-		password: bcrypt.hashSync(req.body.password),
-		cpass: bcrypt.hashSync(req.body.cpass)},
-		{ where: {	phone_no: req.body.phone_no, } }
-	).then(user => {
-		res.status(200).json({
-			"description": user
-
-		});
-	}).catch(err => {
-		res.status(500).json({
-			"description": "Can not access Management Board",
-			"error": err
-		});
-	})
-}
 
 
 exports.Updatewallet = (req, res) => {
@@ -697,13 +709,13 @@ exports.addtoCart = (req, res) => {
 	// Save User to Database
 	console.log("Processing func -> Adding Products");
 	AddtoCart.create({
-	name:req.body.name,
-	price:req.body.price,
-	image:req.body.image,
-	quantity:req.body.quantity,
-	userId:req.body.userId,
-	total:req.body.total,
-	productId:req.body.productId,
+		name: req.body.name,
+		price: req.body.price,
+		image: req.body.image,
+		quantity: req.body.quantity,
+		userId: req.body.userId,
+		total: req.body.total,
+		productId: req.body.productId,
 
 	}).then(addtocart => {
 		res.status(200).json({
@@ -719,15 +731,15 @@ exports.addtoCart = (req, res) => {
 }
 exports.order = (req, res) => {
 	// Save User to Database
-	
+
 	Order.create({
-	name:req.body.name,
-	price:req.body.price,
-	image:req.body.image,
-	quantity:req.body.quantity,
-	userId:req.body.userId,
-	total:req.body.total,
-	productId:req.body.productId,
+		name: req.body.name,
+		price: req.body.price,
+		image: req.body.image,
+		quantity: req.body.quantity,
+		userId: req.body.userId,
+		total: req.body.total,
+		productId: req.body.productId,
 
 	}).then(order => {
 		res.status(200).json({
@@ -744,15 +756,16 @@ exports.order = (req, res) => {
 
 exports.AddtoOrder = (req, res) => {
 	// Save User to Database
-	
+
 	Order.create({
-		name:req.body.name,
-	price:req.body.price,
-	image:req.body.image,
-	quantity:req.body.quantity,
-	userId:req.userId,
-	total:req.body.total,
-	productId:req.body.productId,
+		name: req.body.name,
+		price: req.body.price,
+		image: req.body.image,
+		quantity: req.body.quantity,
+		userId: req.body.userId,
+		total: req.body.total,
+		productId: req.body.productId,
+
 	}).then(order => {
 		res.status(200).json({
 			"description": "order Added",
@@ -769,11 +782,11 @@ exports.AddtoOrder = (req, res) => {
 exports.orderList = (req, res) => {
 	Order.findAll({
 		where: { userId: req.userId },
-		attributes: ['id', 'name', 'price',  'image', 'userId','quantity','total','userId','productId'],
+		attributes: ['id', 'name', 'price', 'image', 'userId', 'quantity', 'total', 'userId', 'productId'],
 	}).then(order => {
 		res.status(200).json({
 			//"description": "Admin Board",
-			"order":order
+			"order": order
 		});
 	}).catch(err => {
 		res.status(500).json({
@@ -784,11 +797,11 @@ exports.orderList = (req, res) => {
 }
 exports.AdminorderList = (req, res) => {
 	Order.findAll({
-		attributes: ['id', 'name', 'price',  'image', 'userId','quantity','total','userId','productId'],
+		attributes: ['id', 'name', 'price', 'image', 'userId', 'quantity', 'total', 'userId', 'productId'],
 	}).then(order => {
 		res.status(200).json({
 			//"description": "Admin Board",
-			"order":order
+			"order": order
 		});
 	}).catch(err => {
 		res.status(500).json({
@@ -801,12 +814,12 @@ exports.AdminorderList = (req, res) => {
 exports.cartlist = (req, res) => {
 	AddtoCart.findAll({
 		where: { userId: req.userId },
-		attributes: ['name', 'price',  'image', 'userId','quantity','total','userId','productId'],
-		
+		attributes: ['name', 'price', 'image', 'userId', 'quantity', 'total', 'userId', 'productId'],
+
 	}).then(addtocart => {
 		res.status(200).json({
-		
-			"cart":addtocart
+
+			"cart": addtocart
 		});
 	}).catch(err => {
 		res.status(500).json({
@@ -818,12 +831,12 @@ exports.cartlist = (req, res) => {
 
 
 exports.cartCount = (req, res) => {
-	AddtoCart.sum('quantity',{
+	AddtoCart.sum('quantity', {
 		where: { userId: req.userId },
 	}).then(addtocart => {
 		res.status(200).json({
-		
-			"cart":addtocart
+
+			"cart": addtocart
 		});
 	}).catch(err => {
 		res.status(500).json({
@@ -840,12 +853,12 @@ exports.cartCount = (req, res) => {
 
 
 exports.cartCounts = (req, res) => {
-	AddtoCart.sum('total',{
+	AddtoCart.sum('total', {
 		where: { userId: req.userId },
 	}).then(addtocart => {
 		res.status(200).json({
-		
-			"cart":addtocart
+
+			"cart": addtocart
 		});
 	}).catch(err => {
 		res.status(500).json({
@@ -856,11 +869,11 @@ exports.cartCounts = (req, res) => {
 }
 
 exports.revenue = (req, res) => {
-	Order.sum('total',{
+	Order.sum('total', {
 	}).then(addtocart => {
 		res.status(200).json({
-		
-			"cart":addtocart
+
+			"cart": addtocart
 		});
 	}).catch(err => {
 		res.status(500).json({
