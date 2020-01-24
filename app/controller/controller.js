@@ -20,7 +20,7 @@ var bcrypt = require('bcryptjs');
 const uploadFolder = __basedir + '/products/';
 
 exports.reseller = (req, file, res) => {
-	res.send('File uploaded successfully! ');
+	return "File uploaded successfully! ";
 
 }
 

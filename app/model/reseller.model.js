@@ -7,7 +7,7 @@ module.exports = (sequelize, Sequelize) => {
 	  Email_address: {type:Sequelize.STRING},
 	  Web_address: {type:Sequelize.STRING},
 	  contact_no: {type:Sequelize.INTEGER(10)},
-	  phone_no: {type:Sequelize.INTEGER(10)},
+	  phone_no: {type:Sequelize.BIGINT},
 	    Registration_certificate: {type:Sequelize.STRING},  
 		GST_Certificate: {type:Sequelize.STRING},  
 		Pan_card: {type:Sequelize.STRING},
