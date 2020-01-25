@@ -187,24 +187,24 @@ exports.updatePass = (req, res) => {
 		}
 
 
-	User.update(
-		{
-			password: bcrypt.hashSync(req.body.password),
-			cpass: bcrypt.hashSync(req.body.cpass)
-		},
-		{ where: { phone_no: req.body.phone_no } }
-	).then(user => {
-		res.status(200).json({
-			"description": user
+		User.update(
+			{
+				password: bcrypt.hashSync(req.body.password),
+				cpass: bcrypt.hashSync(req.body.cpass)
+			},
+			{ where: { phone_no: req.body.phone_no } }
+		).then(user => {
+			res.status(200).json({
+				"description": user
 
-		});
-	}).catch(err => {
-		res.status(500).json({
-			"description": "Can not access Management Board",
-			"error": err
-		});
+			});
+		}).catch(err => {
+			res.status(500).json({
+				"description": "Can not access Management Board",
+				"error": err
+			});
+		})
 	})
-})
 }
 
 
@@ -731,6 +731,7 @@ exports.addtoCart = (req, res) => {
 }
 exports.order = (req, res) => {
 	// Save User to Database
+	// console.log(req);
 
 	Order.create({
 		name: req.body.name,
@@ -754,11 +755,13 @@ exports.order = (req, res) => {
 	})
 }
 
-exports.AddtoOrder = (req, res) => {
-	// Save User to Database
+// either find a tag with name or create a new one
 
-	Order.create({
-		name: req.body.name,
+exports.AddtoOrder = (req, res) => {
+	console.log(req);
+	Order.create(
+		{
+		name:req.body.name,
 		price: req.body.price,
 		image: req.body.image,
 		quantity: req.body.quantity,
@@ -777,6 +780,7 @@ exports.AddtoOrder = (req, res) => {
 			"error": err
 		});
 	})
+	
 }
 
 exports.orderList = (req, res) => {
@@ -883,6 +887,40 @@ exports.revenue = (req, res) => {
 	})
 }
 
+
+
+exports.destroy = (req, res) => {
+
+	AddtoCart.destroy({
+		where: { userId: req.userId },
+
+
+	}).then(addtocart => {
+		res.status(200).json({
+			"user": addtocart
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Management Board",
+			"error": err
+		});
+	})
+}
+
+exports.destroyOne = (req, res) => {
+	AddtoCart.destroy({
+		where: { id: req.id },
+	}).then(addtocart => {
+		res.status(200).json({
+			"user": addtocart
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Management Board",
+			"error": err
+		});
+	})
+}
 
 exports.managementBoard = (req, res) => {
 	User.findOne({

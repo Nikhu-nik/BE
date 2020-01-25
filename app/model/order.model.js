@@ -2,7 +2,7 @@ module.exports = (sequelize, Sequelize) => {
 	const Order = sequelize.define('order', {
 	
 	
-	  name: {type:Sequelize.STRING},
+	  name: {type:Sequelize.Sequelize.STRING},
 	  price: {type:Sequelize.STRING},
       quantity: {type:Sequelize.STRING},
 		image:{type:Sequelize.STRING},
