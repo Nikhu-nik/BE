@@ -470,7 +470,7 @@ exports.orderCount = (req, res) => {
 exports.updateUserStatus = (req, res) => {
 
 	console.log(req);
-
+	var id = req.params.id;
 	var status = req.params.status;
 	if (status == 1) {
 		User.update(
