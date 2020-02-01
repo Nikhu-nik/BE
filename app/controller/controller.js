@@ -179,7 +179,7 @@ exports.property = (req, res) => {
 exports.updatePass = (req, res) => {
 	User.findOne({
 		where: {
-			phone_no: req.body.phone_no,
+			Email_address: req.body.Email_address,
 		}
 	}).then(user => {
 		if (!user) {
@@ -192,7 +192,7 @@ exports.updatePass = (req, res) => {
 				password: bcrypt.hashSync(req.body.password),
 				cpass: bcrypt.hashSync(req.body.cpass)
 			},
-			{ where: { phone_no: req.body.phone_no } }
+			{ where: { Email_address: req.body.Email_address } }
 		).then(user => {
 			res.status(200).json({
 				"description": user
@@ -208,6 +208,35 @@ exports.updatePass = (req, res) => {
 }
 
 
+
+exports.updateProfile = (req, res) => {
+
+
+		User.update(
+			{
+				
+		Business_name: req.body.Business_name,
+		owner_name: req.body.owner_name,
+		owneraddress: req.body.owneraddress,
+		Email_address: req.body.Email_address,
+		
+		phone_no: req.body.phone_no,
+	photo:req.body.photo
+			},
+			{ where: { id: req.userId } }
+		).then(user => {
+			res.status(200).json({
+				"description": user
+
+			});
+		}).catch(err => {
+			res.status(500).json({
+				"description": "Can not access Management Board",
+				"error": err
+			});
+		})
+
+}
 
 exports.signin = (req, res) => {
 	console.log("Sign-In");
@@ -289,7 +318,6 @@ exports.adminContent = (req, res) => {
 
 exports.userList = (req, res) => {
 	User.findAll({
-
 		attributes: ['id', 'owner_name', 'Email_address', 'phone_no', 'status'],
 		include: [{
 			model: Role,
@@ -818,7 +846,7 @@ exports.AdminorderList = (req, res) => {
 exports.cartlist = (req, res) => {
 	AddtoCart.findAll({
 		where: { userId: req.userId },
-		attributes: ['name', 'price', 'image', 'userId', 'quantity', 'total', 'userId', 'productId'],
+		attributes: ['id','name', 'price', 'image', 'userId', 'quantity', 'total', 'userId', 'productId'],
 
 	}).then(addtocart => {
 		res.status(200).json({
@@ -908,8 +936,9 @@ exports.destroy = (req, res) => {
 }
 
 exports.destroyOne = (req, res) => {
+	var id=req.params.id;
 	AddtoCart.destroy({
-		where: { id: req.id },
+		where: { id:id },
 	}).then(addtocart => {
 		res.status(200).json({
 			"user": addtocart

@@ -5,6 +5,8 @@ module.exports = (sequelize, Sequelize) => {
 	  owneraddress: {type:Sequelize.STRING},
 	  Email_address: {type:Sequelize.STRING},
 	  Gst_no: {type:Sequelize.STRING},
+	  photo: {type:Sequelize.STRING},
+	
 	
 	  phone_no: {type:Sequelize.BIGINT},
 	    Registration_certificate: {type:Sequelize.STRING},  

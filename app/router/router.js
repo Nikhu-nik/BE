@@ -31,7 +31,7 @@ module.exports = function(app) {
 	app.get('/api/dashproductList', [authJwt.verifyToken], controller.dashproductList);
 	app.get('/api/category', [authJwt.verifyToken], controller.Category);
 	app.delete('/api/destroy', [authJwt.verifyToken], controller.destroy);
-	app.delete('/api/destroyOne', [authJwt.verifyToken], controller.destroyOne);
+	app.delete('/api/destroyOne/:id', [authJwt.verifyToken], controller.destroyOne);
 
 
 	app.get('/api/userview',[authJwt.verifyToken], controller.userview);
@@ -75,4 +75,7 @@ app.get('/api/getcart', [authJwt.verifyToken], controller.cartlist);
 app.get('/api/file/all', controller.listUrlFiles);
 
 app.get('/api/file/:filename',  controller.downloadFile);
+app.put('/api/file/profileupdate',  controller.updateProfile);
+
+
 }

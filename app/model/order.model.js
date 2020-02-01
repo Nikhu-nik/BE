@@ -1,7 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
 	const Order = sequelize.define('order', {
-	
-	
 	  name: {type:Sequelize.Sequelize.STRING},
 	  price: {type:Sequelize.STRING},
       quantity: {type:Sequelize.STRING},
@@ -9,9 +7,7 @@ module.exports = (sequelize, Sequelize) => {
 		total:{type:Sequelize.STRING},
 	  productId: {type:Sequelize.STRING},
       userId: {type:Sequelize.STRING}
-    
 	});
-	
 	return Order;
 }
 
