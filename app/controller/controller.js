@@ -54,6 +54,10 @@ exports.properties = (req, res) => {
 	res.send('ghgFile uploaded successfully!');
 }
 
+exports.profile = (req, res) => {
+	res.send('profile uploaded successfully!');
+}
+
 
 exports.signup = (req, res) => {
 	// Save User to Database
@@ -318,7 +322,7 @@ exports.adminContent = (req, res) => {
 
 exports.userList = (req, res) => {
 	User.findAll({
-		attributes: ['id', 'owner_name', 'Email_address', 'phone_no', 'status'],
+		attributes: ['id', 'owner_name','Business_name', 'Email_address', 'owneraddress','Gst_no','phone_no', 'status'],
 		include: [{
 			model: Role,
 			attributes: ['id', 'name'],
@@ -343,7 +347,7 @@ exports.userList = (req, res) => {
 exports.userview = (req, res) => {
 	User.findOne({
 		where: { id: req.userId },
-		attributes: ['owner_name', 'business_name', 'Email_address', 'phone_no', 'owneraddress', 'Wallet', 'Balance'],
+		attributes: ['owner_name', 'business_name', 'Email_address', 'phone_no', 'owneraddress', 'Wallet', 'Balance','photo'],
 		include: [{
 			model: Role,
 			attributes: ['id', 'name'],
@@ -789,14 +793,15 @@ exports.AddtoOrder = (req, res) => {
 	console.log(req);
 	Order.create(
 		{
-		name:req.body.name,
+			name:req.body.name,
+
 		price: req.body.price,
 		image: req.body.image,
 		quantity: req.body.quantity,
 		userId: req.body.userId,
 		total: req.body.total,
 		productId: req.body.productId,
-
+ 
 	}).then(order => {
 		res.status(200).json({
 			"description": "order Added",

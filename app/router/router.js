@@ -3,6 +3,7 @@ const authJwt = require('./verifyJwtToken');
 let upload = require('../config/multer.config.js');
 let products = require('../config/storage.js');
 let property = require('../config/property.js');
+let profile = require('../config/profile.js');
 var express = require('express');
 module.exports = function(app) {
 
@@ -17,7 +18,7 @@ module.exports = function(app) {
 	
 	app.get('/api/test/pm', [authJwt.verifyToken, authJwt.isPmOrAdmin], controller.managementBoard);
 	
-	app.get('/api/userList', [authJwt.verifyToken, authJwt.isAdmin], controller.userList);
+	app.get('/api/userList', [authJwt.verifyToken], controller.userList);
 	
 	app.get('/api/productCount', [authJwt.verifyToken, authJwt.isAdmin], controller.productCount);
 	
@@ -25,6 +26,7 @@ module.exports = function(app) {
 	
 	app.use('/products', express.static(process.cwd() + '/products'))  //nodejs server.js
 	app.use('/property', express.static(process.cwd() + '/property'))
+	app.use('/profile', express.static(process.cwd() + '/profile'))
 
 	app.get('/api/productList', [authJwt.verifyToken], controller.productList);
 	app.get('/api/propertyList', [authJwt.verifyToken], controller.propertyList);
@@ -71,11 +73,12 @@ app.get('/api/getcart', [authJwt.verifyToken], controller.cartlist);
 	app.post('/api/file/upload', upload.array("file"),  controller.reseller);
 		app.post('/api/file/product', products.array("file"),  controller.products);
 		app.post('/api/file/property', property.array("file"),  controller.properties);
+		app.post('/api/file/profile', profile.array("file"),  controller.profile);
 		
 app.get('/api/file/all', controller.listUrlFiles);
 
 app.get('/api/file/:filename',  controller.downloadFile);
-app.put('/api/file/profileupdate',  controller.updateProfile);
+app.put('/api/file/profileupdate', [authJwt.verifyToken],   controller.updateProfile);
 
 
 }
