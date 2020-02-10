@@ -49,6 +49,7 @@ module.exports = function(app) {
 	app.get('/api/total', [authJwt.verifyToken],controller.cartCounts);
 	app.put('/api/updatesProduct/:id/', [authJwt.verifyToken], controller.UpdateProduct);
 	app.get('/api/service/:service/',[authJwt.verifyToken],  controller.service);
+	app.get('/api/productName',[authJwt.verifyToken],  controller.productName);
 
 	app.put('/api/updatepass/',  controller.updatePass);
 app.get('/api/getprname',[authJwt.verifyToken],controller.productname);

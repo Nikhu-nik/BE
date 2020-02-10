@@ -79,7 +79,7 @@ exports.signup = (req, res) => {
 		Product_category: req.body.Product_category,
 		complete_address: req.body.complete_address,
 		status: req.body.status,
-		Wallet: req.body.Balance,
+		Wallet: req.body.Wallet,
 		Balance: req.body.Balance
 
 	}).then(user => {
@@ -190,7 +190,6 @@ exports.updatePass = (req, res) => {
 			return res.status(404).send('User Not Found or not approved.');
 		}
 
-
 		User.update(
 			{
 				password: bcrypt.hashSync(req.body.password),
@@ -216,29 +215,29 @@ exports.updatePass = (req, res) => {
 exports.updateProfile = (req, res) => {
 
 
-		User.update(
-			{
-				
-		Business_name: req.body.Business_name,
-		owner_name: req.body.owner_name,
-		owneraddress: req.body.owneraddress,
-		Email_address: req.body.Email_address,
-		
-		phone_no: req.body.phone_no,
-	photo:req.body.photo
-			},
-			{ where: { id: req.userId } }
-		).then(user => {
-			res.status(200).json({
-				"description": user
+	User.update(
+		{
 
-			});
-		}).catch(err => {
-			res.status(500).json({
-				"description": "Can not access Management Board",
-				"error": err
-			});
-		})
+			Business_name: req.body.Business_name,
+			owner_name: req.body.owner_name,
+			owneraddress: req.body.owneraddress,
+			Email_address: req.body.Email_address,
+
+			phone_no: req.body.phone_no,
+			photo: req.body.photo
+		},
+		{ where: { id: req.userId } }
+	).then(user => {
+		res.status(200).json({
+			"description": user
+
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Management Board",
+			"error": err
+		});
+	})
 
 }
 
@@ -298,6 +297,7 @@ exports.userContent = (req, res) => {
 	})
 }
 
+
 exports.adminContent = (req, res) => {
 	User.findOne({
 		where: { id: req.userId },
@@ -322,7 +322,7 @@ exports.adminContent = (req, res) => {
 
 exports.userList = (req, res) => {
 	User.findAll({
-		attributes: ['id', 'owner_name','Business_name', 'Email_address', 'owneraddress','Gst_no','phone_no', 'status'],
+		attributes: ['id', 'owner_name', 'Business_name', 'Email_address', 'owneraddress', 'Gst_no', 'phone_no', 'status'],
 		include: [{
 			model: Role,
 			attributes: ['id', 'name'],
@@ -343,11 +343,26 @@ exports.userList = (req, res) => {
 	})
 }
 
+exports.productName = (req, res) => {
+	Product.findAll({
+		attributes: ['id', 'name'],
+
+	}).then(product => {
+		res.status(200).json({
+			"product": product
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Admin Board",
+			"error": err
+		});
+	})
+}
 
 exports.userview = (req, res) => {
 	User.findOne({
 		where: { id: req.userId },
-		attributes: ['owner_name', 'business_name', 'Email_address', 'phone_no', 'owneraddress', 'Wallet', 'Balance','photo'],
+		attributes: ['owner_name', 'business_name', 'Email_address', 'phone_no', 'owneraddress', 'Wallet', 'Balance', 'photo'],
 		include: [{
 			model: Role,
 			attributes: ['id', 'name'],
@@ -793,27 +808,27 @@ exports.AddtoOrder = (req, res) => {
 	console.log(req);
 	Order.create(
 		{
-			name:req.body.name,
+			name: req.body.name,
 
-		price: req.body.price,
-		image: req.body.image,
-		quantity: req.body.quantity,
-		userId: req.body.userId,
-		total: req.body.total,
-		productId: req.body.productId,
- 
-	}).then(order => {
-		res.status(200).json({
-			"description": "order Added",
-			"order": order
-		});
-	}).catch(err => {
-		res.status(500).json({
-			"description": "Can not access addtocart Page",
-			"error": err
-		});
-	})
-	
+			price: req.body.price,
+			image: req.body.image,
+			quantity: req.body.quantity,
+			userId: req.body.userId,
+			total: req.body.total,
+			productId: req.body.productId,
+
+		}).then(order => {
+			res.status(200).json({
+				"description": "order Added",
+				"order": order
+			});
+		}).catch(err => {
+			res.status(500).json({
+				"description": "Can not access addtocart Page",
+				"error": err
+			});
+		})
+
 }
 
 exports.orderList = (req, res) => {
@@ -851,7 +866,7 @@ exports.AdminorderList = (req, res) => {
 exports.cartlist = (req, res) => {
 	AddtoCart.findAll({
 		where: { userId: req.userId },
-		attributes: ['id','name', 'price', 'image', 'userId', 'quantity', 'total', 'userId', 'productId'],
+		attributes: ['id', 'name', 'price', 'image', 'userId', 'quantity', 'total', 'userId', 'productId'],
 
 	}).then(addtocart => {
 		res.status(200).json({
@@ -941,9 +956,9 @@ exports.destroy = (req, res) => {
 }
 
 exports.destroyOne = (req, res) => {
-	var id=req.params.id;
+	var id = req.params.id;
 	AddtoCart.destroy({
-		where: { id:id },
+		where: { id: id },
 	}).then(addtocart => {
 		res.status(200).json({
 			"user": addtocart
