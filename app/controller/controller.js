@@ -165,7 +165,7 @@ exports.property = (req, res) => {
 		propertyimage2: req.body.propertyimage2,
 		propertyimage3: req.body.propertyimage3,
 		propertyimage4: req.body.propertyimage4,
-	
+
 		userId: req.body.userId
 
 	}).then(property => {
@@ -347,7 +347,7 @@ exports.userList = (req, res) => {
 
 exports.productName = (req, res) => {
 	Product.findAll({
-		attributes: ['id', 'name','price','image','desc'],
+		attributes: ['id', 'name', 'price', 'image', 'desc'],
 	}).then(product => {
 		res.status(200).json({
 			"product": product
@@ -442,7 +442,7 @@ exports.dashproductList = (req, res) => {
 exports.propertyList = (req, res) => {
 	Property.findAll({
 
-		attributes: ['id','propertyname', 'propertyprice', 'propertyimage', 'userId'],
+		attributes: ['id', 'propertyname', 'propertyprice', 'propertyimage', 'userId'],
 	}).then(property => {
 		res.status(200).json({
 			//"description": "Admin Board",

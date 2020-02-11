@@ -1,5 +1,5 @@
 const multer = require('multer');
- 
+
 var storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, __basedir + '/property/')
@@ -8,12 +8,7 @@ var storage = multer.diskStorage({
     cb(null, file.originalname)
   }
 });
- 
- 
- 
 
-
-var property = multer({storage: storage});
-
+var property = multer({ storage: storage });
 module.exports = property;
 

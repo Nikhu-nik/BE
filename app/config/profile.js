@@ -1,5 +1,5 @@
 const multer = require('multer');
- 
+
 var storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, __basedir + '/profile/')
@@ -9,7 +9,7 @@ var storage = multer.diskStorage({
   }
 });
 
-var profile = multer({storage: storage});
+var profile = multer({ storage: storage });
 
 module.exports = profile;
 
