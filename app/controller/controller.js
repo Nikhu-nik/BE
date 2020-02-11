@@ -11,6 +11,7 @@ const Product = db.product;
 const Property = db.property;
 const AddtoCart = db.addtocart;
 const Order = db.order;
+const payment = db.payment;
 const Category = db.category;
 const Wish = db.wish;
 
@@ -19,10 +20,68 @@ var multer = require("multer");
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 const uploadFolder = __basedir + '/products/';
+var paypal = require('paypal-rest-sdk');
+
+var client_id = 'YOUR CLIENT ID';
+var secret = 'YOUR SECRET';
+
+paypal.configure({
+    'mode': 'sandbox', //sandbox or live
+    'client_id': 'AfCNzg9cgGC3M0bktEqp3WjYRmR0wwXHQ5U3B0_wnVyCB_jS3rbYieEsw9dMSzT-GxAMt8PeQ0AzIDk9',
+    'client_secret': 'EI15l7nFfRwF3Tn3amW3fnXAYA4TPBjjYWvIkPL9L1GQdIhc6MHBYblgPnsJ7p3F4R_16KXH0IOsilo5'
+});
 
 
 exports.reseller = (req, file, res) => {
 	return "File uploaded successfully! ";
+
+}
+
+
+exports.card= (req, res) => {
+	var create_payment_json = {
+		"intent": "sale",
+		"payer": {
+		  "payment_method": "credit_card",
+		  "funding_instruments": [{
+			"credit_card": {
+			  "type": "visa",
+			  "number": "4417119669820331",
+			  "expire_month": "11",
+			  "expire_year": "2018",
+			  "cvv2": "874",
+			  "first_name": "Joe",
+			  "last_name": "Shopper",
+			  "billing_address": {
+				"line1": "52 N Main ST",
+				"city": "Johnstown",
+				"state": "OH",
+				"postal_code": "43210",
+				"country_code": "US" }}}]},
+				"redirect_urls":{
+					"return_url":"http://localhost:8080/executePayment",
+					"cancel_url":"http://localhost:8080/cancelpayment",
+				},
+		"transactions": [{
+		  "amount": {
+			"total": "7.47",
+			"currency": "USD",
+			"details": {
+			  "subtotal": "7.41",
+			  "tax": "0.03",
+			  "shipping": "0.03"}},
+		  "description": "This is the payment transaction description." 
+		}]
+	};
+	
+	paypal.payment.create(create_payment_json, function (error, payment) {
+		if(error){
+			console.log(error);
+		  } else {
+			
+			console.log(payment);
+		  }
+	});
 
 }
 

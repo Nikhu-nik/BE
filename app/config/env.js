@@ -1,7 +1,7 @@
 const env = {
   database: 'nodeauth',
   username: 'root',
-  password: 'Champ5baby',
+  password: 'my_password',
   host: 'localhost',
   dialect: 'mysql',
   pool: {

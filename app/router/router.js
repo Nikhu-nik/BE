@@ -73,6 +73,7 @@ module.exports = function (app) {
 	// app.get('/api/card', [authJwt.verifyToken], controller.paypal);
 
 	app.post('/api/file/upload', upload.array("file"), controller.reseller);
+	app.post('/api/card', controller.card);
 	app.post('/api/file/product', products.array("file"), controller.products);
 	app.post('/api/file/property', property.array("file"), controller.properties);
 	app.post('/api/file/profile', profile.array("file"), controller.profile);
@@ -80,8 +81,8 @@ module.exports = function (app) {
 	app.get('/api/file/:filename', controller.downloadFile);
 	app.put('/api/file/profileupdate', [authJwt.verifyToken], controller.updateProfile);
 
-app.globalAmount=0;
-	app.post('/card',function(req,res){
+
+	/* app.post('/card',function(req,res){
 // app.globalAmount=req.body.amount;
 		var create_payment_json = {
 			"intent": "sale",
@@ -122,6 +123,6 @@ app.globalAmount=0;
 			  }
 		});
 		
-	})
+	}) */
 	
 }
