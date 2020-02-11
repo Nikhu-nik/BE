@@ -20,6 +20,7 @@ var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 const uploadFolder = __basedir + '/products/';
 
+
 exports.reseller = (req, file, res) => {
 	return "File uploaded successfully! ";
 
@@ -322,6 +323,9 @@ exports.adminContent = (req, res) => {
 	})
 }
 
+
+
+
 exports.userList = (req, res) => {
 	User.findAll({
 		attributes: ['id', 'owner_name', 'Business_name', 'Email_address', 'owneraddress', 'Gst_no', 'phone_no', 'status'],
@@ -344,6 +348,33 @@ exports.userList = (req, res) => {
 		});
 	})
 }
+
+
+/* 
+exports.userList = (req, res) => {
+	User.findAll({
+		
+	
+		include: [{
+			model: User,
+			attributes: ['id', 'owner_name', 'Business_name', 'Email_address', 'owneraddress', 'Gst_no', 'phone_no', 'status'],
+			through: {
+				where: { roleId:2 },
+				attributes: ['userId', 'roleId'],
+			}
+		}]
+	}).then(user => {
+		res.status(200).json({
+			//"description": "Admin Board",
+			"user": user
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Admin Board",
+			"error": err
+		});
+	})
+} */
 
 exports.productName = (req, res) => {
 	Product.findAll({

@@ -5,6 +5,20 @@ let products = require('../config/storage.js');
 let property = require('../config/property.js');
 let profile = require('../config/profile.js');
 var express = require('express');
+
+var paypal = require('paypal-rest-sdk');
+
+var client_id = 'YOUR CLIENT ID';
+var secret = 'YOUR SECRET';
+
+paypal.configure({
+    'mode': 'sandbox', //sandbox or live
+    'client_id': 'AfCNzg9cgGC3M0bktEqp3WjYRmR0wwXHQ5U3B0_wnVyCB_jS3rbYieEsw9dMSzT-GxAMt8PeQ0AzIDk9',
+    'client_secret': 'EI15l7nFfRwF3Tn3amW3fnXAYA4TPBjjYWvIkPL9L1GQdIhc6MHBYblgPnsJ7p3F4R_16KXH0IOsilo5'
+});
+
+
+
 module.exports = function (app) {
 
 	const controller = require('../controller/controller.js');
@@ -56,6 +70,8 @@ module.exports = function (app) {
 	app.get('/api/orderCount', [authJwt.verifyToken], controller.orderCount);
 	app.get('/api/AdminorderList', [authJwt.verifyToken], controller.AdminorderList);
 	app.get('/api/getcart', [authJwt.verifyToken], controller.cartlist);
+	// app.get('/api/card', [authJwt.verifyToken], controller.paypal);
+
 	app.post('/api/file/upload', upload.array("file"), controller.reseller);
 	app.post('/api/file/product', products.array("file"), controller.products);
 	app.post('/api/file/property', property.array("file"), controller.properties);
@@ -63,4 +79,49 @@ module.exports = function (app) {
 	app.get('/api/file/all', controller.listUrlFiles);
 	app.get('/api/file/:filename', controller.downloadFile);
 	app.put('/api/file/profileupdate', [authJwt.verifyToken], controller.updateProfile);
+
+app.globalAmount=0;
+	app.post('/card',function(req,res){
+// app.globalAmount=req.body.amount;
+		var create_payment_json = {
+			"intent": "sale",
+			"payer": {
+			  "payment_method": "credit_card",
+			  "funding_instruments": [{
+				"credit_card": {
+				  "type": "visa",
+				  "number": "4417119669820331",
+				  "expire_month": "11",
+				  "expire_year": "2018",
+				  "cvv2": "874",
+				  "first_name": "Joe",
+				  "last_name": "Shopper",
+				  "billing_address": {
+					"line1": "52 N Main ST",
+					"city": "Johnstown",
+					"state": "OH",
+					"postal_code": "43210",
+					"country_code": "US" }}}]},
+			"transactions": [{
+			  "amount": {
+				"total": "7.47",
+				"currency": "USD",
+				"details": {
+				  "subtotal": "7.41",
+				  "tax": "0.03",
+				  "shipping": "0.03"}},
+			  "description": "This is the payment transaction description." 
+			}]
+		};
+		
+		paypal.payment.create(create_payment_json, function (error, payment) {
+			if(error){
+				console.error(error);
+			  } else {
+				console.log(payment);
+			  }
+		});
+		
+	})
+	
 }
