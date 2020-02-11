@@ -34,8 +34,12 @@ module.exports = function(app) {
 	app.get('/api/category', [authJwt.verifyToken], controller.Category);
 	app.delete('/api/destroy', [authJwt.verifyToken], controller.destroy);
 	app.delete('/api/destroyOne/:id', [authJwt.verifyToken], controller.destroyOne);
+	app.delete('/api/destroyUser/:id', [authJwt.verifyToken], controller.destroyUser);
+	app.delete('/api/destroyProduct/:id', [authJwt.verifyToken], controller.destroyProduct);
+	app.delete('/api/destroyProperty/:id', [authJwt.verifyToken], controller.destroyProperty);
+	app.delete('/api/destroywish/:id', [authJwt.verifyToken], controller.destroywish);
 
-
+	
 	app.get('/api/userview',[authJwt.verifyToken], controller.userview);
 	
 	app.get('/api/updateuser/:id/:status',[authJwt.verifyToken], controller.updateUserStatus);
@@ -62,10 +66,12 @@ app.get('/api/revenue',[authJwt.verifyToken],controller.revenue);
 	app.post('/api/addproductdetails',[authJwt.verifyToken],  controller.addproductdetails);
 	app.post('/api/addtocart', [authJwt.verifyToken], controller.addtoCart);
 	app.post('/api/order', [authJwt.verifyToken], controller.order);
+	app.post('/api/wish', [authJwt.verifyToken], controller.wish);
 	app.post('/api/AddtoOrder',[authJwt.verifyToken],  controller.AddtoOrder);
 
 	
 app.get('/api/getorder', [authJwt.verifyToken], controller.orderList);
+app.get('/api/getwish', [authJwt.verifyToken], controller.wishList);
 app.get('/api/orderCount', [authJwt.verifyToken], controller.orderCount);
 app.get('/api/AdminorderList', [authJwt.verifyToken], controller.AdminorderList);
 app.get('/api/getcart', [authJwt.verifyToken], controller.cartlist);

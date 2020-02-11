@@ -12,6 +12,7 @@ const Property = db.property;
 const AddtoCart = db.addtocart;
 const Order = db.order;
 const Category = db.category;
+const Wish = db.wish;
 
 const Op = db.Sequelize.Op;
 var multer = require("multer");
@@ -164,6 +165,7 @@ exports.property = (req, res) => {
 		propertyimage2: req.body.propertyimage2,
 		propertyimage3: req.body.propertyimage3,
 		propertyimage4: req.body.propertyimage4,
+	
 		userId: req.body.userId
 
 	}).then(property => {
@@ -345,8 +347,7 @@ exports.userList = (req, res) => {
 
 exports.productName = (req, res) => {
 	Product.findAll({
-		attributes: ['id', 'name'],
-
+		attributes: ['id', 'name','price','image','desc'],
 	}).then(product => {
 		res.status(200).json({
 			"product": product
@@ -441,7 +442,7 @@ exports.dashproductList = (req, res) => {
 exports.propertyList = (req, res) => {
 	Property.findAll({
 
-		attributes: ['propertyname', 'propertyprice', 'propertyimage', 'userId'],
+		attributes: ['id','propertyname', 'propertyprice', 'propertyimage', 'userId'],
 	}).then(property => {
 		res.status(200).json({
 			//"description": "Admin Board",
@@ -802,6 +803,32 @@ exports.order = (req, res) => {
 	})
 }
 
+exports.wish = (req, res) => {
+	// Save User to Database
+	// console.log(req);
+
+	Wish.create({
+		name: req.body.name,
+		price: req.body.price,
+		image: req.body.image,
+		quantity: req.body.quantity,
+		userId: req.body.userId,
+		total: req.body.total,
+		productId: req.body.productId,
+
+	}).then(order => {
+		res.status(200).json({
+			"description": "order Added",
+			"order": order
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access addtocart Page",
+			"error": err
+		});
+	})
+}
+
 // either find a tag with name or create a new one
 
 exports.AddtoOrder = (req, res) => {
@@ -833,6 +860,25 @@ exports.AddtoOrder = (req, res) => {
 
 exports.orderList = (req, res) => {
 	Order.findAll({
+		where: { userId: req.userId },
+		attributes: ['id', 'name', 'price', 'image', 'userId', 'quantity', 'total', 'userId', 'productId'],
+	}).then(order => {
+		res.status(200).json({
+			//"description": "Admin Board",
+			"order": order
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Admin Board",
+			"error": err
+		});
+	})
+}
+
+
+
+exports.wishList = (req, res) => {
+	Wish.findAll({
 		where: { userId: req.userId },
 		attributes: ['id', 'name', 'price', 'image', 'userId', 'quantity', 'total', 'userId', 'productId'],
 	}).then(order => {
@@ -955,6 +1001,9 @@ exports.destroy = (req, res) => {
 	})
 }
 
+
+
+
 exports.destroyOne = (req, res) => {
 	var id = req.params.id;
 	AddtoCart.destroy({
@@ -970,6 +1019,74 @@ exports.destroyOne = (req, res) => {
 		});
 	})
 }
+
+
+
+exports.destroyUser = (req, res) => {
+	var id = req.params.id;
+	User.destroy({
+		where: { id: id },
+	}).then(user => {
+		res.status(200).json({
+			"user": user
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Management Board",
+			"error": err
+		});
+	})
+}
+exports.destroywish = (req, res) => {
+	var id = req.params.id;
+	Wish.destroy({
+		where: { id: id },
+	}).then(user => {
+		res.status(200).json({
+			"user": user
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Management Board",
+			"error": err
+		});
+	})
+}
+
+
+exports.destroyProduct = (req, res) => {
+	var id = req.params.id;
+	Product.destroy({
+		where: { id: id },
+	}).then(user => {
+		res.status(200).json({
+			"user": user
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Management Board",
+			"error": err
+		});
+	})
+}
+
+
+exports.destroyProperty = (req, res) => {
+	var id = req.params.id;
+	Property.destroy({
+		where: { id: id },
+	}).then(user => {
+		res.status(200).json({
+			"user": user
+		});
+	}).catch(err => {
+		res.status(500).json({
+			"description": "Can not access Management Board",
+			"error": err
+		});
+	})
+}
+
 
 exports.managementBoard = (req, res) => {
 	User.findOne({
